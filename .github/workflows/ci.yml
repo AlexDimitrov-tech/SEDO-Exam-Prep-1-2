@@ -1,6 +1,3 @@
-# Task 3 - CI for Repo 2 (.NET app)
-# Put this file in Repo 2 at:  .github/workflows/ci.yml
-# Runs on every push to "develop" and to any "feature/..." branch.
 name: CI
 
 on:
@@ -8,28 +5,15 @@ on:
     branches:
       - develop
       - 'feature/**'
-  workflow_dispatch:          # lets you also start it by hand from the Actions tab
 
 jobs:
   build-and-test:
-    name: Build and test
     runs-on: ubuntu-24.04
-
     steps:
-      - name: Check out the code
-        uses: actions/checkout@v4
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          # Match the <TargetFramework> in the .csproj files (net6.0 -> 6.0.x, net8.0 -> 8.0.x ...)
           dotnet-version: '6.0.x'
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
-
-      - name: Run unit and integration tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+      - run: dotnet restore
+      - run: dotnet build --no-restore
+      - run: dotnet test --no-build --verbosity normal
